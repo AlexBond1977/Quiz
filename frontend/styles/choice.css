@@ -13,32 +13,38 @@
     max-width: 583px;
 }
 
+.choice-title {
+
+}
+
 .choice-description {
-    margin-top: 40px;
     font-size: 18px;
-    line-height: 22px;
+    margin-top: 40px;
 }
 
 .choice-options {
+    width: 588px;
     margin-top: 60px;
-    width: 583px;
 }
 
 .choice-option {
-    border: 1px solid #C1BBBB;
-    background: #FFF;
-    font-size: 18px;
-    line-height: 22px;
-    padding: 26px 70px 26px 40px;
     position: relative;
+    background: #FFFFFF;
+    border: 1px solid #C1BBBB;
+    font-size: 18px;
+    padding: 26px 70px 26px 40px;
     transition: .2s ease all;
+
 }
 
 .choice-option:hover {
-    border-left: 5px solid #6933DC;
     cursor: pointer;
+    border-left: 5px solid #6933DC;
+    font-family: 'Museo Sans Cyrl Bold', sans-serif;
     color: #6933DC;
-    font-family: "Museo Sans Cyrl Bold", sans-serif;
+}
+
+.choice-option-text {
 }
 
 .choice-option-arrow {

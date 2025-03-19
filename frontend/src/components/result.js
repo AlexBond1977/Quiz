@@ -15,16 +15,20 @@ export class Result {
         if (!userInfo) {
             location.href = '#/';
         }
-
+        // Проверка наличия ID теста в URL.
         if (this.routeParams.id) {
             try {
-                const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id + '/result?userId=' + userInfo.userId);
+                // Запрос к API для получения результатов теста.
+                const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id +
+                    '/result?userId=' + userInfo.userId);
 
                 if (result) {
                     if (result.error) {
                         throw new Error(result.error);
                     }
-                    document.getElementById('result-score').innerText = result.score + '/' + result.total;
+                    document.getElementById('result-score').innerText = result.score +
+                        '/' + result.total; // Обновление поля результата.
+                    this.addAnswersLink(); // Установка ссылки для перехода на страницу ответов.
                     return;
                 }
             } catch (error) {
@@ -32,5 +36,11 @@ export class Result {
             }
         }
         location.href = '#/';
+    }
+
+    addAnswersLink() {
+        const answersLink = document.getElementById('answers-link');
+        // Установка адреса для перехода на страницу ответов.
+    answersLink.href = '#/answers?id=' + this.routeParams.id;
     }
 }

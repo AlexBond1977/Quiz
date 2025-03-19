@@ -4,31 +4,32 @@ import config from "../../config/config.js";
 import {Auth} from "../services/auth.js";
 
 export class Test {
-
     constructor() {
-        this.progressBarElement = null;
-        this.passButtonElement = null;
-        this.prevButtonElement = null;
-        this.nextButtonElement = null;
-        this.questionTitleElement = null;
-        this.optionsElement = null;
-        this.quiz = null;
+        this.progressBarElement = null; // Элемент прогресс-бара.
+        this.passButtonElement = null; // Кнопка для завершения теста.
+        this.prevButtonElement = null; // Кнопка "Назад".
+        this.nextButtonElement = null; // Кнопка "Далее".
+        this.questionTitleElement = null; // Элемент заголовка вопроса.
+        this.optionsElement = null; // Элемент для отображения ответов.
+        this.quiz = null; // Хранит данные о тесте.
         this.currentQuestionIndex = 1;
-        this.userResult = [];
+        this.userResult = []; // Хранит результаты пользователя.
         this.routeParams = UrlManager.getQueryParams();
 
         this.init();
     }
 
+    //В методе проверяется наличие ID теста в параметрах URL и выполняется GET-запрос на сервер
+    // для получения данных теста. Если запрос успешен, данные теста сохраняются и начинается тест.
     async init() {
         if (this.routeParams.id) {
             try {
-                const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id);
+                const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id)
+
                 if (result) {
                     if (result.error) {
                         throw new Error(result.error);
                     }
-
                     this.quiz = result;
                     this.startQuiz();
                 }
@@ -53,8 +54,7 @@ export class Test {
         this.prepareProgressBar();
         this.showQuestion();
 
-        // таймер на 59 секунд
-        const timerElement = document.getElementById('timer');
+        const timerElement = document.getElementById('timer')
         let seconds = 59;
         this.interval = setInterval(function () {
             seconds--;
@@ -86,7 +86,9 @@ export class Test {
     }
 
     showQuestion() {
+        // Получаем вопрос по текущему индексу.
         const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
+        // Отображение заголовка вопроса.
         this.questionTitleElement.innerHTML = '<span>Вопрос ' + this.currentQuestionIndex + ':</span> ' + activeQuestion.question;
 
         this.optionsElement.innerHTML = '';
@@ -96,6 +98,7 @@ export class Test {
             const optionElement = document.createElement('div');
             optionElement.className = 'test-question-option';
 
+            // Создаем уникальный ID для кнопки.
             const inputId = 'answer-' + answer.id;
             const inputElement = document.createElement('input');
             inputElement.className = 'option-answer';
@@ -120,13 +123,11 @@ export class Test {
 
             this.optionsElement.appendChild(optionElement);
         });
-
         if (chosenOption && chosenOption.chosenAnswerId) {
-            this.nextButtonElement.removeAttribute('disabled');
+            this.nextButtonElement.removeAttribute('disabled', 'disabled');
         } else {
             this.nextButtonElement.setAttribute('disabled', 'disabled');
         }
-
         if (this.currentQuestionIndex === this.quiz.questions.length) {
             this.nextButtonElement.innerText = 'Завершить';
         } else {
@@ -144,25 +145,29 @@ export class Test {
     }
 
     move(action) {
-        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
+        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1]; // Текущий вопрос.
+        // Находим выбранный ответ.
         const chosenAnswer = Array.from(document.getElementsByClassName('option-answer')).find(element => {
             return element.checked;
-        })
+        });
+
         let chosenAnswerId = null;
+        // Присваиваем выбранному ответу его ID.
         if (chosenAnswer && chosenAnswer.value) {
             chosenAnswerId = Number(chosenAnswer.value);
         }
 
+        // Проверяем, выбирался ли ответ на текущий вопрос.
         const existingResult = this.userResult.find(item => {
             return item.questionId === activeQuestion.id;
-        });
+        })
         if (existingResult) {
             existingResult.chosenAnswerId = chosenAnswerId;
         } else {
             this.userResult.push({
                 questionId: activeQuestion.id,
                 chosenAnswerId: chosenAnswerId,
-            });
+            })
         }
 
         if (action === 'next' || action === 'pass') {
@@ -176,7 +181,7 @@ export class Test {
             this.complete();
             return;
         }
-
+        // Обновление прогресс-бара.
         Array.from(this.progressBarElement.children).forEach((item, index) => {
             const currentItemIndex = index + 1;
             item.classList.remove('complete');
@@ -192,18 +197,19 @@ export class Test {
         this.showQuestion();
     }
 
+    //Метод завершает тест, отправляет результаты на сервер и
+    // перенаправляет пользователя на страницу с результатами.
     async complete() {
         const userInfo = Auth.getUserInfo();
         if (!userInfo) {
             location.href = '#/';
         }
-
         try {
             const result = await CustomHttp.request(config.host + '/tests/' + this.routeParams.id + '/pass', 'POST',
                 {
                     userId: userInfo.userId,
-                    results: this.userResult,
-                })
+                    results: this.userResult
+                });
 
             if (result) {
                 if (result.error) {

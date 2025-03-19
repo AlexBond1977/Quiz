@@ -3,16 +3,19 @@ import {Choice} from "./components/choice.js";
 import {Test} from "./components/test.js";
 import {Result} from "./components/result.js";
 import {Auth} from "./services/auth.js";
+import {Answers} from "./components/answers.js";
 
+// Класс Router отвечает за обработку роутов в приложении, загружая соответствующий контент и
+// стили в зависимости от текущего роута URL.
 export class Router {
-
     constructor() {
-        this.contentElement = document.getElementById('content');
-        this.stylesElement = document.getElementById('styles');
-        this.titleElement = document.getElementById('page-title');
-        this.profileElement = document.getElementById('profile');
-        this.profileFullNameElement = document.getElementById('profile-full-name');
+        this.contentElement = document.getElementById('content'); // Элемент, куда будет загружаться контент.
+        this.stylesElement = document.getElementById('styles'); // Элемент для подключения стилей.
+        this.titleElement = document.getElementById('page-title'); // Элемент для заголовка страницы.
+        this.profileElement = document.getElementById('profile'); // Элемент для профиля.
+        this.profileFullNameElement = document.getElementById('profile-full-name'); // Полное имя профиля.
 
+        // Определяем массив роутов.
         this.routes = [
             {
                 route: '#/',
@@ -67,10 +70,21 @@ export class Router {
                     new Result();
                 }
             },
-        ]
+            {
+                route: '#/answers',
+                title: 'Правильные ответы',
+                template: 'templates/answers.html',
+                styles: 'styles/answers.css',
+                load: () => {
+                    new Answers();
+                }
+            },
+
+        ];
     }
 
     async openRoute() {
+        //Получаем текущий роут из URL.
         const urlRoute = window.location.hash.split('?')[0];
         if (urlRoute === '#/logout') {
             await Auth.logout();
@@ -78,6 +92,7 @@ export class Router {
             return;
         }
 
+        //Находим новый роут по URL.
         const newRoute = this.routes.find(item => {
             return item.route === urlRoute;
         });
@@ -86,21 +101,19 @@ export class Router {
             window.location.href = '#/';
             return;
         }
-
-        this.contentElement.innerHTML =
-            await fetch(newRoute.template).then(response => response.text());
+        // Загружаем контент и стили для нового роута.
+        this.contentElement.innerHTML = await fetch(newRoute.template).then(response => response.text());
         this.stylesElement.setAttribute('href', newRoute.styles);
-        this.titleElement.innerHTML = newRoute.title;
+        this.titleElement.innerText = newRoute.title;
 
         const userInfo = Auth.getUserInfo();
         const accessToken = localStorage.getItem(Auth.accessTokenKey);
-        if (userInfo && accessToken) {
+        if (accessToken && userInfo) {
             this.profileElement.style.display = 'flex';
             this.profileFullNameElement.innerText = userInfo.fullName;
         } else {
             this.profileElement.style.display = 'none';
         }
-
-        newRoute.load()
+        newRoute.load();
     }
 }

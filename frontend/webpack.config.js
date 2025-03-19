@@ -11,19 +11,20 @@ module.exports = {
         clean: true,
     },
     devServer: {
-        static: '.dist',
+        static: './dist',
         compress: true,
         port: 9000,
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: './index.html',
-    }),
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: "./index.html"
+        }),
         new CopyPlugin({
             patterns: [
                 {from: "templates", to: "templates"},
                 {from: "styles", to: "styles"},
-                {from: "static/fonts", to: "static/fonts"},
-                {from: "static/images", to: "static/images"},
+                {from: "static/fonts", to: "fonts"},
+                {from: "static/images", to: "images"},
             ],
         }),
     ],
@@ -35,7 +36,6 @@ module.exports = {
     //             use: {
     //                 loader: 'babel-loader',
     //                 options: {
-    //                     targets: "defaults",
     //                     presets: [
     //                         ['@babel/preset-env']
     //                     ]

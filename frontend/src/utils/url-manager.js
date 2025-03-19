@@ -1,6 +1,6 @@
- export class UrlManager {
+export class UrlManager {
 
-    static getQueryParams(){
+    static getQueryParams() {
         const qs = document.location.hash.split('+').join(' ');
 
         let params = {},
@@ -12,11 +12,11 @@
         }
 
         return params;
-    }
 
-     static checkUserData(params) {
-         if(!params.name || !params.lastName || !params.email) {
-             location.href = '#/';
-         }
-     }
- }
+    }
+    static checkUserData(params) {
+        if (!params.name || !params.lastName || !params.email) {
+            location.href = '#/'
+        }
+    }
+}

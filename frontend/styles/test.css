@@ -3,22 +3,80 @@
     padding-bottom: 50px;
 }
 
+.test .container {
+}
+
 .test-pre-title {
     color: #DCDCF3;
     font-size: 20px;
-    line-height: 24px;
 }
 
 .test-progress-bar {
+    display: flex;
     margin-top: 60px;
     margin-bottom: 80px;
+}
+
+.test-progress-bar-item {
+    position: relative;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.test-progress-bar-item:not(:first-child) {
+    margin-left: 130px;
+}
+.test-progress-bar-item:not(:last-child)::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    left: 28px;
+    top: 10px;
+    width: 184px;
+    height: 6px;
+    background: #DCDCF3;
+}
+.test-progress-bar-item.complete:not(:last-child)::before {
+    background: #6933DC;
+}
+
+.test-progress-bar-item-circle {
+    width: 26px;
+    height: 26px;
+    background: #DCDCF3;
+    border-radius: 50%;
+}
+
+.test-progress-bar-item-text {
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.test-progress-bar-item.complete .test-progress-bar-item-circle,
+.test-progress-bar-item.active .test-progress-bar-item-circle {
+    background: #6933DC;
+}
+
+.test-progress-bar-item.active::after {
+    content: "";
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    background: #DCDCF3;
+    top: 6px;
+
+}
+
+.test-question {
 }
 
 .test-question-title {
+    color: #333;
     font-family: "Museo Sans Cyrl Bold", sans-serif;
     font-size: 36px;
-    line-height: 43px;
 }
 
 .test-question-title span {
@@ -31,12 +89,10 @@
 }
 
 .test-question-option {
-    font-size: 20px;
-    line-height: 24px;
-    margin-bottom: 20px;
     display: flex;
+    font-size: 20px;
+    margin-bottom: 20px;
 }
-
 .test-question-option label {
     cursor: pointer;
 }
@@ -47,6 +103,10 @@
     justify-content: space-between;
 }
 
+.test-previous-action {
+}
+
+
 .test-time {
     display: flex;
     align-items: center;
@@ -55,41 +115,42 @@
 .test-time-text {
     color: #6933DC;
     font-size: 17px;
-    line-height: 20px;
     margin-right: 15px;
 }
 
 .test-time-clock {
-    background-image: url("../static/images/time.png");
+    background-image: url('/images/clock.svg');
     background-size: cover;
     background-position: center;
     width: 27px;
     height: 29px;
+
     font-size: 10px;
-    line-height: 28px;
     text-align: center;
+    line-height: 28px;
 }
 
-.pass-question {
+.test-next-action {
+}
+
+.pass-action {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
 }
 
-.pass-question a {
+.pass-action a {
     color: #6933DC;
     font-size: 17px;
-    line-height: 20px;
     text-decoration: none;
+
     display: flex;
     align-items: center;
 }
-
-.pass-question a:hover {
+.pass-action a:hover {
     text-decoration: underline;
 }
-
-.pass-question a img {
+.pass-action a img {
     margin-left: 13px;
 }
 
@@ -102,75 +163,19 @@ input[type="radio"] {
     border-radius: 50%;
     margin: 0 13px 0 0;
     transform: translateY(2px);
+
     display: grid;
     place-content: center;
 }
-
 input[type="radio"]::before {
     content: "";
-    width: 10px;
     height: 10px;
+    width: 10px;
     border-radius: 50%;
     box-shadow: inset 10px 10px #6933DC;
-    transition: 0.2s ease transform;
+    transition: .2s ease transform;
     transform: scale(0);
 }
-
 input[type="radio"]:checked::before {
     transform: scale(1);
-}
-
-.test-progress-bar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-.test-progress-bar-item:not(:first-child) {
-    margin-left: 130px;
-}
-
-.test-progress-bar-item:not(:last-child)::before {
-    content: "";
-    z-index: -1;
-    position: absolute;
-    width: 184px;
-    background: #DCDCF3;
-    height: 6px;
-    left: 28px;
-    top: 10px;
-}
-
-.test-progress-bar-item.complete:not(:last-child)::before {
-    background-color: #6933DC;
-}
-
-.test-progress-bar-item-circle {
-    background: #DCDCF3;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-}
-
-.test-progress-bar-item-text {
-    font-size: 13px;
-    line-height: 16px;
-    margin-top: 10px;
-}
-
-.test-progress-bar-item.complete .test-progress-bar-item-circle,
-.test-progress-bar-item.active .test-progress-bar-item-circle{
-    background-color: #6933DC;
-}
-
-.test-progress-bar-item.active::after {
-    content: "";
-    border-radius: 50%;
-    position: absolute;
-    z-index: 1;
-    width: 14px;
-    height: 14px;
-    background: #DCDCF3;
-    top: 6px;
 }

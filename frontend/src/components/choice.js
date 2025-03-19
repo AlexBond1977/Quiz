@@ -4,47 +4,51 @@ import config from "../../config/config.js";
 import {Auth} from "../services/auth.js";
 
 export class Choice {
-
     constructor() {
-        this.quizzes = [];
-        this.testResult = null;
-        this.routeParams = UrlManager.getQueryParams();
+        this.quizzes = []; // Массив для хранения доступных тестов.
+        this.testResult = null; // Хранит результаты тестов пользователя.
+        this.routeParams = UrlManager.getQueryParams(); // Получаем параметры из URL.
 
         this.init();
     }
 
+    //Метод выполняет запрос к бэкенду для получения списка доступных тестов и результатов тестов
+    // пользователя, если он авторизован.
     async init() {
         try {
-            const result = await CustomHttp.request(config.host + '/tests');
+            const result = await CustomHttp.request(config.host + '/tests'); // Получение всех тестов.
+
             if (result) {
                 if (result.error) {
                     throw new Error(result.error);
                 }
-
-                this.quizzes = result;
+                this.quizzes = result;  // Сохраняем тесты в классе.
             }
         } catch (error) {
             return console.log(error);
         }
 
-        const userInfo = Auth.getUserInfo();
+        const userInfo = Auth.getUserInfo(); // Получение информации о пользователе.
         if (userInfo) {
             try {
+                // Получение результатов тестов для текущего пользователя.
                 const result = await CustomHttp.request(config.host + '/tests/results?userId=' + userInfo.userId);
+
                 if (result) {
                     if (result.error) {
                         throw new Error(result.error);
                     }
-
                     this.testResult = result;
                 }
             } catch (error) {
-                return console.log(error);
+                return console.log(error); // Сохраняем результаты тестов.
             }
         }
-        this.processQuizzes();
+        this.processQuizzes(); // Обработка полученных тестов
     }
 
+    //Метод создания элементов для каждого теста на странице, добавления информацию о результатах
+    // пользователя и включения обработчика клика для перехода к выбранному тесту.
     processQuizzes() {
         const choiceOptionsElement = document.getElementById('choice-options');
         if (this.quizzes && this.quizzes.length > 0) {
@@ -53,10 +57,9 @@ export class Choice {
                 const choiceOptionElement = document.createElement('div');
                 choiceOptionElement.className = 'choice-option';
                 choiceOptionElement.setAttribute('data-id', quiz.id);
-                // добавляем обработчик событий по клику при выборе варианта теста
                 choiceOptionElement.onclick = function () {
                     that.chooseQuiz(this);
-                };
+                }
 
                 const choiceOptionTextElement = document.createElement('div');
                 choiceOptionTextElement.className = 'choice-option-text';
@@ -65,7 +68,7 @@ export class Choice {
                 const choiceOptionArrowElement = document.createElement('div');
                 choiceOptionArrowElement.className = 'choice-option-arrow';
 
-                const result = this.testResult.find(item => item.testId === quiz.id);
+                const result = this.testResult ? this.testResult.find(item => item.testId === quiz.id) : null;
                 if (result) {
                     const choiceOptionResultElement = document.createElement('div');
                     choiceOptionResultElement.className = 'choice-option-result';
@@ -74,10 +77,9 @@ export class Choice {
                 }
 
                 const choiceOptionImageElement = document.createElement('img');
-                choiceOptionImageElement.setAttribute('src', 'static/images/arrow.png');
+                choiceOptionImageElement.setAttribute('src', '/images/arrow.png');
                 choiceOptionImageElement.setAttribute('alt', 'Стрелка');
 
-                //собираем элемент, вкладывая созданные элементы в другие элементы по структуре блока
                 choiceOptionArrowElement.appendChild(choiceOptionImageElement);
                 choiceOptionElement.appendChild(choiceOptionTextElement);
                 choiceOptionElement.appendChild(choiceOptionArrowElement);
@@ -87,6 +89,7 @@ export class Choice {
         }
     }
 
+//Метод обработки клика, если ID теста существует, пользователь перенаправляется на страницу теста.
     chooseQuiz(element) {
         const dataId = element.getAttribute('data-id');
         if (dataId) {
@@ -94,4 +97,3 @@ export class Choice {
         }
     }
 }
-
