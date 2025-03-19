@@ -39,10 +39,24 @@ a {
     border: 0;
     cursor: pointer;
     transition: 0.4s;
+    /*добавляем после замены кнопки на ссылку*/
+    text-decoration: none;
+}
+
+/*после замены кнопки на ссылку она стала занимать не все прострнаство, являясь строчным элементом
+превращаем ее в блочный элемент*/
+a.button{
+    display: inline-block;
 }
 
 .button:hover {
     background: #32098a;
+}
+
+/*добавляем стили для не функциональной кнопки*/
+.button:disabled {
+    background-color: #e2dfe7;
+    cursor: not-allowed;
 }
 
 .button-transparent {
@@ -54,6 +68,12 @@ a {
 .button-transparent:hover {
     background: #6933DC;
     color: #fff;
+}
+
+.button-transparent:disabled {
+    background: transparent;
+    color: #e2dfe7;
+    border: 1px solid #e2dfe7;
 }
 
 .footer {

@@ -21,25 +21,28 @@
         <div class="choice-content">
             <h1 class="choice-title common-title">Выберите <span>тему теста</span></h1>
             <div class="choice-description">Чтобы начать тест, выберите одну из предложенных ниже тем.</div>
-            <div class="choice-options">
-                <div class="choice-option">
-                    <div class="choice-option-text">Тест №1. “JavaScript: Начальный уровень”</div>
-                    <div class="choice-option-arrow">
-                        <img src="images/arrow.png" alt="Стрелка">
-                    </div>
-                </div>
-                <div class="choice-option">
-                    <div class="choice-option-text">Тест №2. “JavaScript: Продвинутый уровень”</div>
-                    <div class="choice-option-arrow">
-                        <img src="images/arrow.png" alt="Стрелка">
-                    </div>
-                </div>
-                <div class="choice-option">
-                    <div class="choice-option-text">Тест №3. “JavaScript: Профессиональный уровень”</div>
-                    <div class="choice-option-arrow">
-                        <img src="images/arrow.png" alt="Стрелка">
-                    </div>
-                </div>
+<!--добавляем id чтобы удобнее было искать элемент и создавать элементы при увеличении количества
+тестов-->
+            <div class="choice-options" id="choice-options">
+<!--УДАЛЯЕМ ЭЛЕМЕНТЫ, ПОСКОЛЬКУ СТРУКТУРА СОЗДАЕТСЯ ИЗ ТЕСТОВ, ПРИХОДЯЩИХ С BACKEND-->
+<!--                <div class="choice-option">-->
+<!--                    <div class="choice-option-text">Тест №1. “JavaScript: Начальный уровень”</div>-->
+<!--                    <div class="choice-option-arrow">-->
+<!--                        <img src="images/arrow.png" alt="Стрелка">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="choice-option">-->
+<!--                    <div class="choice-option-text">Тест №2. “JavaScript: Продвинутый уровень”</div>-->
+<!--                    <div class="choice-option-arrow">-->
+<!--                        <img src="images/arrow.png" alt="Стрелка">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="choice-option">-->
+<!--                    <div class="choice-option-text">Тест №3. “JavaScript: Профессиональный уровень”</div>-->
+<!--                    <div class="choice-option-arrow">-->
+<!--                        <img src="images/arrow.png" alt="Стрелка">-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
         <div class="choice-image">
@@ -49,6 +52,9 @@
 </section>
 
 <footer class="footer">«АйтилогияQuiz» © Все права защищены / 2022</footer>
+
+<script src="scripts/common.js"></script>
+<script src="scripts/choice.js"></script>
 
 </body>
 </html>
